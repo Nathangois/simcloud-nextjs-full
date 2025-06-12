@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import dgram from 'dgram';
 import { create } from 'xmlbuilder2';
 import crypto from 'crypto';
+import { db } from '../../../lib/firebase-admin';
 
 const config = {
   ip: '191.7.95.241',
