@@ -1,5 +1,5 @@
-import { db } from '../../firebase-admin';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { db } from '../../../lib/firebase-admin';
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse) {
   try {

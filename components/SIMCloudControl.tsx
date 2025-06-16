@@ -43,7 +43,7 @@ export default function SIMCloudControl() {
     await fetch('/api/simcloud/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'simbankGroups', data: updated })
+      body: JSON.stringify({ id: 'simbankGroups', value: updated })
     });
 
     alert(`Grupo '${name}' excluído do Firebase`);
@@ -191,7 +191,7 @@ export default function SIMCloudControl() {
     await fetch('/api/simcloud/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'simbankGroups', data: updated })
+      body: JSON.stringify({ id: 'simbankGroups', value: updated })
     });
 
     alert(`Grupo '${groupName}' salvo no Firebase`);
@@ -236,21 +236,37 @@ export default function SIMCloudControl() {
           type="text"
           placeholder="Ex: 3,7,10"
           value={excludedDwgPorts.join(',')}
-          onChange={e => setExcludedDwgPorts(e.target.value.split(',').map(Number))}
+          onChange={e => setExcludedDwgPorts(e.target.value.split(',').filter(p => p.trim() !== '').map(Number))}
         />
         <button
           onClick={async () => {
             await fetch('/api/simcloud/settings', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ type: 'excludedDwgPorts', data: excludedDwgPorts })
+              body: JSON.stringify({ id: 'excludedDwgPorts', value: excludedDwgPorts })
             });
             alert('Exclusões DWG salvas no Firebase');
           }}
         >
           Salvar exclusões DWG no Firebase
         </button>
-        <p>Atualmente ignorando: {excludedDwgPorts.join(', ') || 'nenhuma'}</p>
+        <div>
+  <h4>Portas DWG ignoradas:</h4>
+  {excludedDwgPorts.length === 0 ? (
+    <p>nenhuma</p>
+  ) : (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+      {excludedDwgPorts.map(port => (
+        <div key={port} style={{ border: '1px solid #ccc', borderRadius: 4, padding: '2px 6px' }}>
+          {port} <button onClick={() => {
+            const updated = excludedDwgPorts.filter(p => p !== port);
+            setExcludedDwgPorts(updated);
+          }}>❌</button>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
         
         <h2>Selecionar Portas SIMBank (0–127)</h2>
@@ -303,21 +319,37 @@ export default function SIMCloudControl() {
           type="text"
           placeholder="Ex: 1,15,20"
           value={excludedSimbankPorts.join(',')}
-          onChange={e => setExcludedSimbankPorts(e.target.value.split(',').map(Number))}
+          onChange={e => setExcludedSimbankPorts(e.target.value.split(',').filter(p => p.trim() !== '').map(Number))}
         />
         <button
           onClick={async () => {
             await fetch('/api/simcloud/settings', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ type: 'excludedSimbankPorts', data: excludedSimbankPorts })
+              body: JSON.stringify({ id: 'excludedSimbankPorts', value: excludedSimbankPorts })
             });
             alert('Exclusões SIMBank salvas no Firebase');
           }}
         >
           Salvar exclusões SIMBank no Firebase
         </button>
-        <p>Atualmente ignorando: {excludedSimbankPorts.join(', ') || 'nenhuma'}</p>
+        <div>
+  <h4>Portas SIMBank ignoradas:</h4>
+  {excludedSimbankPorts.length === 0 ? (
+    <p>nenhuma</p>
+  ) : (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+      {excludedSimbankPorts.map(port => (
+        <div key={port} style={{ border: '1px solid #ccc', borderRadius: 4, padding: '2px 6px' }}>
+          {port} <button onClick={() => {
+            const updated = excludedSimbankPorts.filter(p => p !== port);
+            setExcludedSimbankPorts(updated);
+          }}>❌</button>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
         <h3>Usar Grupo Salvo</h3>
         <select onChange={e => setSimbankPorts(savedGroups[e.target.value] || [])}>

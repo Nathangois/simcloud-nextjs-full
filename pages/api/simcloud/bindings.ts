@@ -1,5 +1,5 @@
-import { db } from '../../firebase-admin';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { db } from '../../../lib/firebase-admin';
 
 const COLL_NAME = 'bindings';
 
